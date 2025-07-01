@@ -16,7 +16,7 @@ import {
   zeroAddress,
 } from 'viem'
 import { bsc } from 'viem/chains'
-import { USDC_ADDRESS, USDT_ADDRESS, WBNB_ADDRESS } from '@/constants'
+import { USD1_ADDRESS, USDC_ADDRESS, USDT_ADDRESS, WBNB_ADDRESS } from '@/constants'
 import { ERC20_ABI } from '@/constants/abis'
 import alphaTokens from '@/constants/tokens'
 import dayjs from '@/lib/dayjs'
@@ -85,6 +85,7 @@ export function isNativeToken(address: Hex) {
 export function isValidSourceToken(address: Hex) {
   return (
     isNativeToken(address)
+    || isAddressEqual(address, USD1_ADDRESS)
     || isAddressEqual(address, USDT_ADDRESS)
     || isAddressEqual(address, USDC_ADDRESS)
     || isAddressEqual(address, WBNB_ADDRESS)
@@ -95,6 +96,12 @@ export async function getTokenInfo(address: Hex) {
   if (isNativeToken(address)) {
     return {
       symbol: 'BNB',
+      decimals: 18,
+    }
+  }
+  if (isAddressEqual(address, USD1_ADDRESS)) {
+    return {
+      symbol: 'USD1',
       decimals: 18,
     }
   }
